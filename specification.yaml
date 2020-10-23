@@ -27,7 +27,7 @@ paths:
                   type: array
                   items:
                     type: string
-                    format: "^[a-zA-Z0-9-_]{1,32}$"
+                    format: "^[a-zA-Z0-9-_]{1,24}$"
                 example: [
                   "cats",
                   "dogs",
@@ -51,7 +51,7 @@ paths:
             required: true
             schema:
               type: string
-              format: "^[a-zA-Z0-9-_]{1,32}$"
+              format: "^[a-zA-Z0-9-_]{1,24}$"
         responses:
           '200':
             description: OK
@@ -78,7 +78,7 @@ paths:
           required: true
           schema:
             type: string
-            format: "^[a-zA-Z0-9-_]{1,32}$"
+            format: "^[a-zA-Z0-9-_]{1,24}$"
       responses:
         '200':
           description: OK
@@ -252,7 +252,7 @@ components:
       properties:
         id:
           type: string
-          format: "^[a-zA-Z0-9-_]{1,32}$"
+          format: "^[a-zA-Z0-9-_]{1,24}$"
           example: "coolusername123"
         host:
           type: string
@@ -268,7 +268,7 @@ components:
       properties:
         id:
           type: string
-          format: "^[a-zA-Z0-9-_]{1,32}$"
+          format: "^[a-zA-Z0-9-_]{1,24}$"
           example: "cs3099"
         title:
           type: string
@@ -296,7 +296,7 @@ components:
       properties:
         parent:
           type: string
-          format: uuidv4
+          format: "uuidv4 OR ^[a-zA-Z0-9-_]{1,24}$"
           example: "dafca76d-5883-4eff-959a-d32bc9f72e1a"
         title:
           type: string
@@ -339,6 +339,10 @@ components:
           type: string
           format: uuidv4
           example: "5ab3acce-e9d1-4b3a-be97-60d2cbe32a4c"
+        parent:
+          type: string
+          format: "uuidv4 OR ^[a-zA-Z0-9-_]{1,24}$"
+          example: "dafca76d-5883-4eff-959a-d32bc9f72e1a"
         children:
           type: array
           items:
