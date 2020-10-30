@@ -290,7 +290,7 @@ components:
       required:
         - parent
         - title
-        - content-type
+        - contentType
         - body
         - author
       properties:
@@ -301,7 +301,7 @@ components:
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Unsigned Integer, Is Now Homeless"
-        content-type:
+        contentType:
           type: string
           example: "text"
         body:
@@ -316,7 +316,7 @@ components:
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
-        content-type:
+        contentType:
           type: string
           example: "text"
         body:
@@ -329,7 +329,7 @@ components:
         - id
         - children
         - title
-        - content-type
+        - contentType
         - body
         - author
         - modified
@@ -352,7 +352,7 @@ components:
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
-        content-type:
+        contentType:
           type: string
           example: "text"
         body:
