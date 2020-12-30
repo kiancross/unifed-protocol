@@ -120,7 +120,7 @@ paths:
           explode: true
           schema:
             type: string
-        - name: min_date
+        - name: minDate
           in: query
           description: Filters by minimum creation date
           required: false
