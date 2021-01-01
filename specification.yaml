@@ -14,6 +14,7 @@ tags:
       $ref: Caching.md
   - name: communities
   - name: posts
+  - name: other
 paths:
   /fed/communities:
       get:
@@ -150,12 +151,12 @@ paths:
       description: |
         If the post is in response to another post, the `title`
         field must be set to `null`.
-        
+
         Servers may decide which `contentType`s they will accept
         as posts (including comments), however they must at least
         accept `text`. If the server does not accept a particular
         `contentType` then it should return a `501` error.
-        
+
         If a server can not render `contentType` `markdown`, it
         should display it as plain text (as opposed to rejecting
         the request).
@@ -257,6 +258,33 @@ paths:
             description: Not Found
           '500':
             description: Internal Server Error
+
+  /fed/key:
+    get:
+      tags:
+        - other
+      summary: Gets the server's public key
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-pem-file:
+              schema:
+                type: string
+                example: |
+                  -----BEGIN PUBLIC KEY-----
+                  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvR0PSqO1+QLMJIzx2Ubl
+                  rfGVhxBpinNoN112WUWFL4jLgs9b/7RaOwMnf4hgzf8upxABDKSSxzd76fKl2rrH
+                  KYyQieJdU5bx2U8Oo8GK3p6/UWE+plLPV05EwpTyzexFA0KvvpYlKYQALFcqqP5j
+                  LZxt6n/yP0vWsT2IsUVDJHkpFjWK0lW8p4ZsaWOXGhOjDAFs/H1Tq95ApSQHveoT
+                  j8PBEFm+zCXUzE0XFUjOJXTpt6jUqDri4Z4aDKUPrXb+lK8OlZ6lijQMuCPsQeXT
+                  vMtq16LU2yIi/MyCQxDgWTgzLUwz053PpgiYoSamjo+g89oGSPcZAwlrW6HJJA5+
+                  uQIDAQAB
+                  -----END PUBLIC KEY-----
+        '500':
+          description: Internal Server Error
+        '501':
+          description: Not Implemented
 
 components:
   schemas:
