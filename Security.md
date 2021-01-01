@@ -87,6 +87,94 @@ Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host 
    `Digest: sha-512=<base64_sha512_hash>`.
    
 ## Some Examples
+
+### Python
+
+Uses the [crytography](https://cryptography.io/en/latest/index.html) library.
+
+#### Exporting Public Key
+
+```python3
+from cryptography.hazmat.primitives import serialization
+
+with open("private.pem", "rb") as key_file:
+   private_key = serialization.load_pem_private_key(
+      key_file.read(),
+      password=None,
+   )   
+   
+public_key = private_key.public_key()
+pem = public_key.public_bytes(
+   encoding=serialization.Encoding.PEM,
+   format=serialization.PublicFormat.SubjectPublicKeyInfo
+)
+
+print(pem.decode("utf-8"))
+```
+
+#### Generating a Digest
+
+```python3
+import base64
+from cryptography.hazmat.primitives import hashes
+
+digest = hashes.Hash(hashes.SHA512())
+digest.update(b"A message")
+
+base64encoded = base64.b64encode(digest.finalize())
+
+print(base64encoded.decode("ascii"))
+```
+
+#### Signing a String
+
+```python3
+import base64
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+
+with open("private.pem", "rb") as key_file:
+   private_key = serialization.load_pem_private_key(
+      key_file.read(),
+      password=None,
+   )   
+  
+message = b"A message I want to sign"
+signature = private_key.sign(
+    message,
+    padding.PKCS1v15(),
+    hashes.SHA512()
+)
+
+print(base64.b64encode(signature).decode("ascii"))
+```
+
+#### Verifying a Signature
+
+```python3
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+
+# You should get the public key from `/fed/key`.
+with open("public.pem", "rb") as key_file:
+    public_key = serialization.load_pem_public_key(key_file.read())
+
+# Get the signature from the HTTP header.
+encoded_signature = "ij3WqCSE+289DW4KV3Rh//4mZ1dev5I7m6rUrYyvcojmPBhuVzqxJ0XLoWPKtGz6aVYi4k+Ide1zTGUIAOWQEwCiT4WP/GrsYukwgAfgS9q80YgiKIyqVBvc953XLVzgnOT+8X2HQ/LTg+BwP23kLeEXPabxhMN323L+gVWVyoiIUYEf0B34PbPq/KTPqW/rHtup6ovSRfvy8Bqeqmtpmc0gJwR7WnKRYEiVn40yRQDxtO6zSjvmObv5U2BKCjprnOAp5yfKzROkpfqui1yjKMp5RfA+NILGiJSSQwgGe1eG0QOWYoW8JecLOrxBHOJMuFc0wDQ0k9cip/nAc/T5Cw=="
+
+decoded_signature = base64.b64decode(encoded_signature)
+
+# If this throws an InvalidSignature exception, then the signature
+# was invalid.
+public_key.verify(
+    decoded_signature,
+    message,
+    padding.PKCS1v15(),
+    hashes.SHA512()
+)
+```
    
 ## N.B.
 
