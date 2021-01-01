@@ -11,7 +11,7 @@ protocol.
 ### Creating the `Digest` Header
 
 Add the [`Digest`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Digest) header to every HTTP
-response. For simplicity, this is restricted to `sha-512`.
+request. For simplicity, this is restricted to `sha-512`.
 
 #### How do I implement it?
 
@@ -23,18 +23,19 @@ response. For simplicity, this is restricted to `sha-512`.
 ##### Warning
 
 Some libraries may give the hash output as hex (rather than binary). In such a case, when Base64
-encoding, you must convert from hex to Base64, *not* plain text to Base64.
+encoding, you must convert from hex to Base64, *not* binary to Base64.
 
 
 ### Creating the `Signature` Header
 
 #### Step 1
-Make the public key available at `/fed/key`. If your server does not
-support this security proposal, then the `/fed/key` endpoint should
-return a `501 Not Implemented` error.
+Make the public key available at `/fed/key`.
+
+* If your server does not support this security proposal, then the
+  `/fed/key` endpoint should return a `501 Not Implemented` error.
 
 #### Step 2
-Construct the following string based on the values from the HTTP response
+Construct the following string based on the values from the HTTP request
 (note that there is a line ending `\n` on all lines apart from the last):
 
 ```
@@ -59,10 +60,11 @@ The order of the key/value pairs MUST be the same as above.
 The string from step 2 should be `rsa-sha512` signed.
 
 #### Step 4
-The signature from step 3 should be Base64 encoded. See the [previous warning](#warning).
+The signature from step 3 should be Base64 encoded. See the
+[previous warning](#warning).
 
 #### Step 5
-Send the following header in the HTTP response:
+Send the following header in the HTTP request:
 ```
 Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
 ```
@@ -76,7 +78,7 @@ All fields are static apart from the final signature field, which is the output 
 1. Obtain the public key from `http://<host>/fed/key`, where `<host>` is the value from the `Host` HTTP header.
    * If the server returns a `501` error, then it has not implemented this security proposal.
    * You may decide whether to accept the request without verification, or reject it.
-   * You do not need to continue any further with verification (including verification of the
+   * You can not continue any further with verification (including verification of the
     `Digest` header).
 2. Generate the string from step 1 of [Creating the Signature Header](#creating-the-signature-header).
 3. Obtain the `<base64_signature>` from the `Signature` header:
