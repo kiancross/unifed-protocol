@@ -31,17 +31,14 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
 1. Make the public key available at `/fed/key`.
    * If your server does not support this security proposal, then the
      `/fed/key` endpoint should return a `501 Not Implemented` error.
-
 2. Construct the following string based on the values from the HTTP request
    (note that there is a line ending `\n` on all lines apart from the last):
-
    ```
    (request-target): post /fed/posts
    host: cooldomain.edu:8080
    date: Tue, 07 Jun 2021 20:51:35 GMT
    digest: SHA-512=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=
    ```
-
    There is a single space after each colon `:`. The part before the colon must be all lower-case. The part
    following the colon (after the space) should be taken verbatim from the source (do not change the case).
    The order of the key/value pairs MUST be the same as above.
@@ -52,15 +49,13 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
    * `host` - The value from the `Host` HTTP header.
    * `date` - The value from the `Date` HTTP header.
    * `digest` - The value from the `Digest` HTTP header.
-
-3. The string from step 2 should be `rsa-sha512` signed.
-
+3. The string from step 2 should be `rsa-sha512` signed using [PKCS #1](https://tools.ietf.org/html/rfc8017)
+   (you will almost certainly need to use a library to do this).
 4. The signature from step 3 should be Base64 encoded. See the
    [previous warning](#warning).
-
 5. Send the following header in the HTTP request:
    ```
-   Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
+   Signature: keyId="rsa-global",algorithm="hs2019",headers="(request-target) host date digest",signature="<base64_signature>"
    ```
    All fields are static apart from the final signature field, which is the output from step 4.
 
@@ -80,7 +75,7 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
 Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
 ```
 4. Using the `rsa-sha512` algorithm, verify, using the public key from step 1, that `<base64_signature>` is
-   valid.
+   valid using [PKCS #1](https://tools.ietf.org/html/rfc8017) (you will almost certainly need to use a library to do this).
 
 ### Verifying the `Digest` Header
 
