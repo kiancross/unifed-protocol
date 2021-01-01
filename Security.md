@@ -3,7 +3,7 @@
 Without a way to verify that a request has originated from who it is claimed to have,
 anybody may send requests impersonating users (including administrators).
 
-This propsal is based on a simplified version of the [HTTP Signatures](https://tools.ietf.org/html/draft-cavage-http-signatures-08)
+This propsal is based on a simplified version of the [HTTP Signatures](https://tools.ietf.org/id/draft-cavage-http-signatures-12.html)
 protocol.
 
 ## Sending a Request
@@ -94,3 +94,9 @@ Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host 
 2. Base64 encode the output of the hash.
 3. Verify that the output from step 2 matches the `<base64_sha512_hash>` value from the `Digest` header:
    `Digest: sha-512=<base64_sha512_hash>`.
+   
+## N.B.
+
+There has been a newly published (November 2020) diverging specification for signing HTTP messages:
+[Signing HTTP Messages] (https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-01.html).
+This proposal is based on the predessor specification.
