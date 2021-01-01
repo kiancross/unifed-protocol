@@ -6,7 +6,7 @@ anybody may send requests impersonating users (including administrators).
 This propsal is based on a simplified version of the [HTTP Signatures](https://tools.ietf.org/html/draft-cavage-http-signatures-08)
 protocol.
 
-## Servers
+## Sending a Request
 
 ### Creating the `Digest` Header
 
@@ -29,6 +29,11 @@ encoding, you must convert from hex to Base64, *not* plain text to Base64.
 ### Creating the `Signature` Header
 
 #### Step 1
+Make the public key available at `/fed/key`. If your server does not
+support this security proposal, then the `/fed/key` endpoint should
+return a `501 Not Implemented` error.
+
+#### Step 2
 Construct the following string based on the values from the HTTP response
 (note that there is a line ending `\n` on all lines apart from the last):
 
@@ -50,24 +55,36 @@ The order of the key/value pairs MUST be the same as above.
 * `date` - The value from the `Date` HTTP header.
 * `digest` - The value from the `Digest` HTTP header.
 
-#### Step 2
-The string from step 1 should be `rsa-sha512` signed.
-
 #### Step 3
-The signature from step 2 should be Base64 encoded. See the [previous warning](#warning).
+The string from step 2 should be `rsa-sha512` signed.
 
 #### Step 4
+The signature from step 3 should be Base64 encoded. See the [previous warning](#warning).
+
+#### Step 5
 Send the following header in the HTTP response:
 ```
 Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
 ```
 All fields are static apart from the final signature field, which is the output from step 4.
 
-#### Step 5
-Make the public key available at `/fed/key`.
 
+## Receiving a Request
 
-## Clients
+### Verifying the `Signature` Header
+
+1. Obtain the public key from `http://<host>/fed/key`, where `<host>` is the value from the `Host` HTTP header.
+  * If the server returns a `501` error, then it has not implemented this security proposal.
+  * You may decide whether to accept the request without verification, or reject it.
+  * You do not need to continue any further with verification (including verification of the
+    `Digest` header).
+2. Generate the string from step 1 of [Creating the Signature Header](#creating-the-signature-header).
+3. Obtain the `<base64_signature>` from the `Signature` header:
+```
+Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
+```
+4. Using the `rsa-sha512` algorithm, verify, using the public key from step 1, that `<base64_signature>` is
+   valid.
 
 ### Verifying the `Digest` Header
 
@@ -75,14 +92,3 @@ Make the public key available at `/fed/key`.
 2. Base64 encode the output of the hash.
 3. Verify that the output from step 2 matches the `<base64_sha512_hash>` value from the `Digest` header:
    `Digest: sha-512=<base64_sha512_hash>`.
-   
-### Verifying the `Signature` Header
-
-1. Generate the string from step 1 of [Creating the Signature Header](#creating-the-signature-header).
-2. Obtain the public key from `http://<host>/fed/key`, where `<host>` is the value from the `Host` HTTP header.
-3. Obtain the `<base64_signature>` from the `Signature` header:
-```
-Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
-```
-4. Using the `rsa-sha512` algorithm, verify, using the public key from step 2, that `<base64_signature>` is
-   valid.
