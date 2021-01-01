@@ -370,6 +370,38 @@ paths:
         "501":
           description: Not Implemented
 
+  /fed/discover:
+    get:
+      tags:
+        - Other
+      summary: Return all known servers
+      description: |
+        Returns all of the servers that are known by the
+        current server.
+
+        The array should be ordered with more 'important'
+        hosts at the beginning and the least 'important'
+        at the end.
+
+        The 'importance' of a server is implementation
+        specific, but some examples include using the
+        total number of posts made to that server by
+        the current server.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "cooldomain.edu"
+        "500":
+          description: Internal Server Error
+        "501":
+          description: Not Implemented
+
 components:
   schemas:
     UserId:
