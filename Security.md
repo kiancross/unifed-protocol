@@ -74,9 +74,9 @@ All fields are static apart from the final signature field, which is the output 
 ### Verifying the `Signature` Header
 
 1. Obtain the public key from `http://<host>/fed/key`, where `<host>` is the value from the `Host` HTTP header.
-  * If the server returns a `501` error, then it has not implemented this security proposal.
-  * You may decide whether to accept the request without verification, or reject it.
-  * You do not need to continue any further with verification (including verification of the
+   * If the server returns a `501` error, then it has not implemented this security proposal.
+   * You may decide whether to accept the request without verification, or reject it.
+   * You do not need to continue any further with verification (including verification of the
     `Digest` header).
 2. Generate the string from step 1 of [Creating the Signature Header](#creating-the-signature-header).
 3. Obtain the `<base64_signature>` from the `Signature` header:
