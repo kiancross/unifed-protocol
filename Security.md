@@ -92,7 +92,7 @@ Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host 
 
 Uses the [crytography](https://cryptography.io/en/latest/index.html) library.
 
-#### Exporting Public Key
+#### Exporting a Public Key
 
 ```python3
 from cryptography.hazmat.primitives import serialization
@@ -174,6 +174,81 @@ public_key.verify(
     padding.PKCS1v15(),
     hashes.SHA512()
 )
+```
+
+### Node
+
+#### Exporting a Public Key
+
+```javascript
+const crypto = require("crypto");
+const fs = require("fs");
+
+const publicKey = crypto.createPublicKey({
+  key: fs.readFileSync("private.pem"),
+  format: "pem"
+});
+
+const encodedPublicKey = publicKey.export({
+  type: "spki",
+  format: "pem"
+});
+
+console.log(encodedPublicKey);
+```
+
+#### Generating a Digest
+
+```javascript
+const crypto = require("crypto");
+
+const hash = crypto.createHash("sha512");
+hash.update("A message");
+
+const digest = hash.digest("base64");
+
+console.log(digest);
+```
+
+#### Signing a String
+
+```javascript
+const crypto = require("crypto");
+const fs = require("fs");
+
+const privateKey = crypto.createPrivateKey({
+  key: fs.readFileSync("private.pem"),
+  format: "pem"
+});
+
+const sign = crypto.createSign("SHA512");
+sign.write("A message I want to sign");
+sign.end();
+
+const signature = sign.sign(privateKey, "base64");
+
+console.log(signature);
+```
+
+#### Verifying a Signature
+
+```javascript
+const crypto = require("crypto");
+const fs = require("fs");
+
+const publicKey = crypto.createPublicKey({
+  key: fs.readFileSync("private.pem"),
+  format: "pem"
+});
+
+const signature = "ij3WqCSE+289DW4KV3Rh//4mZ1dev5I7m6rUrYyvcojmPBhuVzqxJ0XLoWPKtGz6aVYi4k+Ide1zTGUIAOWQEwCiT4WP/GrsYukwgAfgS9q80YgiKIyqVBvc953XLVzgnOT+8X2HQ/LTg+BwP23kLeEXPabxhMN323L+gVWVyoiIUYEf0B34PbPq/KTPqW/rHtup6ovSRfvy8Bqeqmtpmc0gJwR7WnKRYEiVn40yRQDxtO6zSjvmObv5U2BKCjprnOAp5yfKzROkpfqui1yjKMp5RfA+NILGiJSSQwgGe1eG0QOWYoW8JecLOrxBHOJMuFc0wDQ0k9cip/nAc/T5Cw==";
+
+const verify = crypto.createVerify("SHA512");
+verify.write("A message I want to sign");
+verify.end();
+
+const result = verify.verify(publicKey, signature, "base64");
+console.log(result);
 ```
    
 ## N.B.
