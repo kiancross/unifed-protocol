@@ -31,6 +31,8 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
 1. Make the public key available at `/fed/key`.
    * If your server does not support this security proposal, then the
      `/fed/key` endpoint should return a `501 Not Implemented` error.
+   * The public key should be serialised using the ASN.1 structure
+     `SubjectPublicKeyInfo` defined in X.509 and encoded using PEM.
 2. Construct the following string based on the values from the HTTP request
    (note that there is a line ending `\n` on all lines apart from the last):
    ```
@@ -84,8 +86,17 @@ Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host 
 3. Verify that the output from step 2 matches the `<base64_sha512_hash>` value from the `Digest` header:
    `Digest: sha-512=<base64_sha512_hash>`.
    
+## Some Examples
+   
 ## N.B.
 
 There has been a newly published (November 2020) diverging specification for signing HTTP messages:
 [Signing HTTP Messages](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-01.html).
 This proposal is based on the predessor specification.
+
+PKCS #1 is used over PSS to simplify implementation.
+
+At the moment, a MITM attack could replace the public key at `/fed/key` with another. This can be solved
+either by:
+* enforcing HTTPS (perhaps using our own agreed upon certificate authority);
+* using a X.509 certificiate instead of a public key, which we use our own authority to sign.
