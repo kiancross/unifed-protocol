@@ -147,6 +147,18 @@ paths:
       tags:
         - posts
       summary: Creates a new post
+      description: |
+        If the post is in response to another post, the `title`
+        field must be set to `null`.
+        
+        Servers may decide which `contentType`s they will accept
+        as posts (including comments), however they must at least
+        accept `text`. If the server does not accept a particular
+        `contentType` then it should return a `501` error.
+        
+        If a server can not render `contentType` `markdown`, it
+        should display it as plain text (as opposed to rejecting
+        the request).
       requestBody:
         description: New post to be added to a community
         content:
@@ -164,6 +176,8 @@ paths:
           description: Bad Request
         '500':
             description: Internal Server Error
+        '501':
+            description: Not Implemented
 
   /fed/posts/{id}:
     get:
