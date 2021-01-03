@@ -1,0 +1,26 @@
+name: Documentation
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    name: Documentation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate
+        uses: seeebiii/redoc-cli-github-action@v10
+        with:
+          args: 'bundle specification.yaml -o index.html'
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .
+          force_orphan: true
