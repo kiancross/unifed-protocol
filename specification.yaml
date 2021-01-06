@@ -9,6 +9,9 @@ info:
   version: "1.0.0"
   title: "Supergroup A Protocol"
 tags:
+  - name: Caching
+    description:
+      $ref: Caching.md
   - name: communities
   - name: posts
 paths:
