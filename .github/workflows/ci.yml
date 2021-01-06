@@ -1,13 +1,10 @@
-name: Documentation
-on:
-  push:
-    branches:
-      - master
+name: CI
+on: [push, pull_request]
 
 jobs:
-  docs:
+  build:
     runs-on: ubuntu-latest
-    name: Documentation
+    name: Build
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -17,6 +14,12 @@ jobs:
         with:
           args: 'bundle specification.yaml -o index.html'
 
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    steps:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
