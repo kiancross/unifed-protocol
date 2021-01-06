@@ -18,7 +18,7 @@ a library.
 Add `Cache-Control: max-age=<seconds>` to HTTP responses, where `<seconds>` is how long the client should
 cache the resourse for.
 
-To prevent a resource bein cached, set `<seconds>` to 0.
+To prevent a resource bein cached, set `<seconds>` to `0`.
 
 *A naive implementation might use a constant value, whereas a smarter implementation
 might change the value, depending on how likely the resource is to change.*
