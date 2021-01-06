@@ -11,8 +11,6 @@ info:
 tags:
   - name: communities
   - name: posts
-  - name: extension
-    description: WIP Extensions
 paths:
   /fed/communities:
       get:
