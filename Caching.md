@@ -7,6 +7,8 @@ headers that they receive.
 
 A summary of cache control headers can be found [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control).
 
+Implementation SHOULD (as much as possible) be [RFC compliant](https://httpwg.org/specs/rfc7234.html).
+
 ## Basic Implementation Using Cache Control Headers
 
 ### HTTP Server
