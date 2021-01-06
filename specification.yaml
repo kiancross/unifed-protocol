@@ -12,6 +12,9 @@ tags:
   - name: Caching
     description:
       $ref: Caching.md
+  - name: Security
+    description:
+      $ref: Security.md
   - name: communities
   - name: posts
   - name: other
