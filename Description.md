@@ -1,3 +1,5 @@
+# Description
+
 Specification for federated social media protocol.
 
 ## Terminology
