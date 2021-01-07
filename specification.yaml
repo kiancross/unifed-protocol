@@ -1,8 +1,4 @@
 openapi: 3.0.0
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/chocol4te/supergroup_a_hybrid/1.0.0
 info:
   description:
     $ref: Description.md
