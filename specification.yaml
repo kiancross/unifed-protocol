@@ -187,6 +187,14 @@ paths:
         If a server can not render `contentType` `markdown`, it
         should display it as plain text (as opposed to rejecting
         the request).
+        
+        `contentType` can either be a single value (e.g.
+        `text`, `markdown`) or an array of types that
+        do not have overlapping field names. Using this,
+        multiple types can be combined. For example,
+        `markdown` could be combined with a (not yet
+        implemented) `poll` and/or `image` type, allowing
+        text, images and a poll in a single post.
       requestBody:
         description: New post to be added to a community
         content:
@@ -380,11 +388,10 @@ components:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Unsigned Integer, Is Now Homeless"
         contentType:
-          type: string
-          example: "text"
-        body:
-          type: string
-          example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          $ref: '#/components/schemas/PostContentType'
+        content:
+          $ref: '#/components/schemas/PostContent'
+
         author:
           type: string
           format: "^[a-zA-Z0-9-_]{1,24}$"
@@ -397,11 +404,9 @@ components:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
         contentType:
-          type: string
-          example: "text"
-        body:
-          type: string
-          example: "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit amet consectetur adipisci[ng]velit, sed quia non-numquam [do] eius modi tempora inci[di]dunt, ut labore et dolore magnam aliquam quaerat voluptatem."
+          $ref: '#/components/schemas/PostContentType'
+        content:
+          $ref: '#/components/schemas/PostContent'
 
     Post:
       type: object
@@ -438,11 +443,9 @@ components:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
         contentType:
-          type: string
-          example: "text"
-        body:
-          type: string
-          example: "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit amet consectetur adipisci[ng]velit, sed quia non-numquam [do] eius modi tempora inci[di]dunt, ut labore et dolore magnam aliquam quaerat voluptatem."
+          $ref: '#/components/schemas/PostContentType'
+        content:
+          $ref: '#/components/schemas/PostContent'
         author:
           $ref: '#/components/schemas/UserId'
         modified:
@@ -465,3 +468,55 @@ components:
         modified:
           type: integer
           example: 1552832552
+          
+    PostContentType:
+      oneOf:
+        - type: string
+          example: "text"
+        - type: array
+          items:
+            type: string
+          example: ["text"]
+          
+    PostContent:
+      anyOf:
+        - $ref: '#/components/schemas/PostContentTypeText'
+        - $ref: '#/components/schemas/PostContentTypeMarkdown'
+          
+    PostContentTypeText:
+      type: object
+      required:
+        - content
+      properties:
+        text:
+          type: string
+          example: >-
+            Sed ut perspiciatis, unde omnis iste natus error sit
+            voluptatem accusantium doloremque laudantium, totam
+            rem aperiam eaque ipsa, quae ab illo inventore veritatis
+            et quasi architecto beatae vitae dicta sunt, explicabo.
+            Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur
+            aut odit aut fugit, sed quia consequuntur magni dolores
+            eos, qui ratione voluptatem sequi nesciunt, neque porro
+            quisquam est, qui dolorem ipsum, quia dolor sit amet
+            consectetur adipisci[ng]velit, sed quia non-numquam
+            [do] eius modi tempora inci[di]dunt, ut labore et
+            dolore magnam aliquam quaerat voluptatem.
+
+    PostContentTypeMarkdown:
+      type: object
+      required:
+        - content
+      properties:
+        text:
+          type: string
+          example: |
+            # Title
+            
+            ```javascript
+            console.log("Hello World")
+            ```
+            
+            ## Subtitle
+            
+            ** Some Bold Text **
