@@ -66,7 +66,8 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
 
 ## Receiving a Request
 
-**You MUST NOT verify requests made to the `GET` `/fed/key` endpoint.**
+**You MUST NOT verify requests made to the `GET` `/fed/key` endpoint. All other requests
+MUST be verified.**
 
 ### Verifying the `Signature` Header
 
