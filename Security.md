@@ -8,12 +8,10 @@ protocol.
 
 ## Sending a Request
 
-**These headers only need to be added if the request method is `POST`, `PUT` or `DELETE`.**
-
 ### Creating the `Digest` Header
 
 Add the [`Digest`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Digest) header to every
-`POST`, `PUT` and `DELETE` HTTP request. For simplicity, this is restricted to `sha-512`.
+HTTP request. For simplicity, this is restricted to `sha-512`.
 
 #### How do I implement it?
 
@@ -49,7 +47,7 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
    The order of the key/value pairs MUST be the same as above.
 
    * `(request-target)` - `<HTTP Method> <Request Path>` (separated by a single space).
-     * `<HTTP Method>` - `POST`, `PUT` or `DELETE`, made lower-case.
+     * `<HTTP Method>` - `GET`, `POST`, `PUT` or `DELETE`, made lower-case.
      * `<Request Path>` e.g. `/fed/posts`.
    * `host` - The value from the `Host` HTTP header.
    * `client-host` - The value from the `Client-Host` HTTP header.
@@ -68,7 +66,7 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
 
 ## Receiving a Request
 
-**Verification only needs to take place if the request method is `POST`, `PUT` or `DELETE`.**
+**You MUST NOT verify requests made to the `GET` `/fed/key` endpoint.**
 
 ### Verifying the `Signature` Header
 
