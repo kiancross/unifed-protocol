@@ -164,13 +164,13 @@ paths:
             default: true
         - name: contentType
           in: query
-          description: Filters by `contentType`.
+          description: Filters by type of post content.
           required: false
           explode: true
           schema:
             type: string
             example: "markdown"
-           
+
       responses:
         '200':
           description: OK
@@ -189,25 +189,23 @@ paths:
         - posts
       summary: Creates a new post
       description: |
-        If the post is in response to another post, the `title`
-        field must be set to `null`.
+        If the post is in response to another post, the `title` field must be
+        set to `null`.
 
-        Servers may decide which `contentType`s they will accept
-        as posts (including comments), however they must at least
-        accept `text`. If the server does not accept a particular
-        `contentType` then it should return a `501` error.
+        Servers may decide which types of contnent they will accept as posts
+        (including comments), however they must at least accept `text` content
+        objects. If the server does not accept a particular type of content
+        then it should return a `501` error.
 
-        If a server can not render `contentType` `markdown`, it
-        should display it as plain text (as opposed to rejecting
-        the request).
-        
-        `contentType` can either be a single value (e.g.
-        `text`, `markdown`) or an array of types that
-        do not have overlapping field names. Using this,
-        multiple types can be combined. For example,
-        `markdown` could be combined with a (not yet
-        implemented) `poll` and/or `image` type, allowing
-        text, images and a poll in a single post.
+        If a server can not render `markdown` content objects, it should
+        display it as plain text (as opposed to rejecting the request).
+
+        `content` can contain multiple objects containing different kinds of
+        content. For example, `markdown` could be combined with a (not yet
+        implemented) `poll` and/or `image` type, allowing text, images and a
+        poll in a single post. However, only a single object of each kind is
+        allowed and there are restrictions on certain combinations, currently
+        `text` and `markdown` are mutually exclusive.
       parameters:
         - $ref: '#/parameters/ClientHost'
       requestBody:
@@ -405,10 +403,10 @@ components:
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Unsigned Integer, Is Now Homeless"
-        contentType:
-          $ref: '#/components/schemas/PostContentType'
         content:
-          $ref: '#/components/schemas/PostContent'
+          type: array
+          items:
+            $ref: '#/components/schemas/PostContent'
 
         author:
           type: string
@@ -421,10 +419,10 @@ components:
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
-        contentType:
-          $ref: '#/components/schemas/PostContentType'
         content:
-          $ref: '#/components/schemas/PostContent'
+          type: array
+          items:
+            $ref: '#/components/schemas/PostContent'
 
     Post:
       type: object
@@ -460,10 +458,10 @@ components:
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
-        contentType:
-          $ref: '#/components/schemas/PostContentType'
         content:
-          $ref: '#/components/schemas/PostContent'
+          type: array
+          items:
+            $ref: '#/components/schemas/PostContent'
         author:
           $ref: '#/components/schemas/UserId'
         modified:
@@ -486,22 +484,13 @@ components:
         modified:
           type: integer
           example: 1552832552
-          
-    PostContentType:
-      oneOf:
-        - type: string
-          example: "text"
-        - type: array
-          items:
-            type: string
-          example: ["text"]
-          
+
     PostContent:
-      anyOf:
-        - $ref: '#/components/schemas/PostContentTypeText'
-        - $ref: '#/components/schemas/PostContentTypeMarkdown'
-          
-    PostContentTypeText:
+      oneOf:
+        - $ref: '#/components/schemas/PostContentText'
+        - $ref: '#/components/schemas/PostContentMarkdown'
+
+    PostContentText:
       type: object
       required:
         - content
@@ -521,20 +510,20 @@ components:
             [do] eius modi tempora inci[di]dunt, ut labore et
             dolore magnam aliquam quaerat voluptatem.
 
-    PostContentTypeMarkdown:
+    PostContentMarkdown:
       type: object
       required:
         - content
       properties:
-        text:
+        markdown:
           type: string
           example: |
             # Title
-            
+
             ```javascript
             console.log("Hello World")
             ```
-            
+
             ## Subtitle
-            
+
             ** Some Bold Text **
