@@ -11,9 +11,9 @@ tags:
   - name: Security
     description:
       $ref: Security.md
-  - name: communities
-  - name: posts
-  - name: other
+  - name: Communities
+  - name: Posts
+  - name: Other
 parameters:
   ClientHost:
     name: Client-Host
@@ -26,7 +26,7 @@ paths:
   /fed/communities:
       get:
         tags:
-          - communities
+          - Communities
         summary: Gets a list of the IDs of communities on the server
         parameters:
           - $ref: '#/parameters/ClientHost'
@@ -54,7 +54,7 @@ paths:
   /fed/communities/{id}:
       get:
         tags:
-          - communities
+          - Communities
         summary: Gets a community by ID
         parameters:
           - $ref: '#/parameters/ClientHost'
@@ -82,7 +82,7 @@ paths:
   /fed/communities/{id}/timestamps:
     get:
       tags:
-        - communities
+        - Communities
       summary: Gets the timestamps of last modification of all posts in a community
       parameters:
         - $ref: '#/parameters/ClientHost'
@@ -117,7 +117,7 @@ paths:
   /fed/posts:
     get:
       tags:
-        - posts
+        - Posts
       summary: Gets all posts matching filters
       parameters:
         - $ref: '#/parameters/ClientHost'
@@ -186,7 +186,7 @@ paths:
             description: Internal Server Error
     post:
       tags:
-        - posts
+        - Posts
       summary: Creates a new post
       description: |
         If the post is in response to another post, the `title` field must be
@@ -231,7 +231,7 @@ paths:
   /fed/posts/{id}:
     get:
         tags:
-          - posts
+          - Posts
         summary: Gets a post
         parameters:
           - $ref: '#/parameters/ClientHost'
@@ -257,7 +257,7 @@ paths:
 
     put:
         tags:
-          - posts
+          - Posts
         summary: Edits a post
         description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
         parameters:
@@ -287,7 +287,7 @@ paths:
             description: Internal Server Error
     delete:
         tags:
-          - posts
+          - Posts
         summary: Deletes a post
         description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
         parameters:
@@ -313,7 +313,7 @@ paths:
   /fed/key:
     get:
       tags:
-        - other
+        - Other
       summary: Gets the server's public key
       responses:
         '200':
@@ -388,8 +388,7 @@ components:
       required:
         - community
         - title
-        - contentType
-        - body
+        - content
         - author
       properties:
         community:
@@ -407,7 +406,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PostContent'
-
         author:
           type: string
           format: "^[a-zA-Z0-9-_]{1,24}$"
@@ -415,6 +413,9 @@ components:
 
     UpdatePost:
       type: object
+      required:
+        - title
+        - content
       properties:
         title:
           type: string
@@ -431,8 +432,7 @@ components:
         - community
         - children
         - title
-        - contentType
-        - body
+        - content
         - author
         - modified
         - created
@@ -475,7 +475,7 @@ components:
       type: object
       required:
         - id
-        - timestamp
+        - modified
       properties:
         id:
           type: string
@@ -493,37 +493,47 @@ components:
     PostContentText:
       type: object
       required:
-        - content
+        - text
       properties:
         text:
-          type: string
-          example: >-
-            Sed ut perspiciatis, unde omnis iste natus error sit
-            voluptatem accusantium doloremque laudantium, totam
-            rem aperiam eaque ipsa, quae ab illo inventore veritatis
-            et quasi architecto beatae vitae dicta sunt, explicabo.
-            Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur
-            aut odit aut fugit, sed quia consequuntur magni dolores
-            eos, qui ratione voluptatem sequi nesciunt, neque porro
-            quisquam est, qui dolorem ipsum, quia dolor sit amet
-            consectetur adipisci[ng]velit, sed quia non-numquam
-            [do] eius modi tempora inci[di]dunt, ut labore et
-            dolore magnam aliquam quaerat voluptatem.
+          type: object
+          required:
+            - text
+          properties:
+            text:
+              type: string
+              example: >-
+                Sed ut perspiciatis, unde omnis iste natus error sit
+                voluptatem accusantium doloremque laudantium, totam
+                rem aperiam eaque ipsa, quae ab illo inventore veritatis
+                et quasi architecto beatae vitae dicta sunt, explicabo.
+                Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur
+                aut odit aut fugit, sed quia consequuntur magni dolores
+                eos, qui ratione voluptatem sequi nesciunt, neque porro
+                quisquam est, qui dolorem ipsum, quia dolor sit amet
+                consectetur adipisci[ng]velit, sed quia non-numquam
+                [do] eius modi tempora inci[di]dunt, ut labore et
+                dolore magnam aliquam quaerat voluptatem.
 
     PostContentMarkdown:
       type: object
       required:
-        - content
+        - markdown
       properties:
         markdown:
-          type: string
-          example: |
-            # Title
+          type: object
+          required:
+            - text
+          properties:
+            text:
+              type: string
+              example: |
+                # Title
 
-            ```javascript
-            console.log("Hello World")
-            ```
+                ```javascript
+                console.log("Hello World")
+                ```
 
-            ## Subtitle
+                ## Subtitle
 
-            ** Some Bold Text **
+                ** Some Bold Text **
