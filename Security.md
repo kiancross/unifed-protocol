@@ -99,7 +99,7 @@ Uses the [crytography](https://cryptography.io/en/latest/index.html) library.
 
 #### Exporting a Public Key
 
-```python3
+```python
 from cryptography.hazmat.primitives import serialization
 
 with open("private.pem", "rb") as key_file:
@@ -119,7 +119,7 @@ print(pem.decode("utf-8"))
 
 #### Generating a Digest
 
-```python3
+```python
 import base64
 from cryptography.hazmat.primitives import hashes
 
@@ -133,7 +133,7 @@ print(base64encoded.decode("ascii"))
 
 #### Signing a String
 
-```python3
+```python
 import base64
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
@@ -157,7 +157,7 @@ print(base64.b64encode(signature).decode("ascii"))
 
 #### Verifying a Signature
 
-```python3
+```python
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
