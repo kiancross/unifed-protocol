@@ -143,15 +143,23 @@ paths:
           schema:
             type: integer
             format: unix_timestamp
-        - name: parentPost
+        - name: author
           in: query
-          description: Filters by `parentPost`.
+          description: Filters by author
           required: false
           explode: true
           schema:
             type: string
             format: "^[a-zA-Z0-9-_]{1,24}$"
             example: "coolusername123"
+        - name: parentPost
+          in: query
+          description: Filters by ID of parent post (will exclude posts with no parent)
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: uuidv4
         - name: includeSubChildrenPosts
           in: query
           description: |
