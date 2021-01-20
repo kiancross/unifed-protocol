@@ -22,6 +22,14 @@ parameters:
     description: The hostname (including port) of the client server.
     schema:
       type: string
+  UserIDHeader:
+    name: User-ID
+    in: header
+    required: true
+    description: The user making the request.
+    schema:
+      type: string
+      format: ^[a-zA-Z0-9-_]{1,24}$
 paths:
   /fed/communities:
     get:
@@ -126,6 +134,7 @@ paths:
       summary: Gets all posts matching filters
       parameters:
         - $ref: "#/parameters/ClientHost"
+        - $ref: "#/parameters/UserIDHeader"
         - name: limit
           in: query
           description: Filters by the n latest posts
@@ -248,6 +257,7 @@ paths:
       summary: Gets a post
       parameters:
         - $ref: "#/parameters/ClientHost"
+        - $ref: "#/parameters/UserIDHeader"
         - in: path
           name: id
           required: true
@@ -275,6 +285,7 @@ paths:
       description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
       parameters:
         - $ref: "#/parameters/ClientHost"
+        - $ref: "#/parameters/UserIDHeader"
         - in: path
           name: id
           required: true
@@ -305,6 +316,7 @@ paths:
       description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
       parameters:
         - $ref: "#/parameters/ClientHost"
+        - $ref: "#/parameters/UserIDHeader"
         - in: path
           name: id
           required: true
