@@ -51,8 +51,16 @@ paths:
               example: ["cats", "dogs", "cs3099", "physics"]
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /fed/communities/{id}:
     get:
@@ -77,10 +85,22 @@ paths:
                 $ref: "#/components/schemas/Community"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /fed/communities/{id}/timestamps:
     get:
@@ -122,10 +142,22 @@ paths:
                 ]
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /fed/posts:
     get:
@@ -212,8 +244,16 @@ paths:
                   $ref: "#/components/schemas/Post"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       tags:
         - Posts
@@ -253,10 +293,22 @@ paths:
                 $ref: "#/components/schemas/Post"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "501":
           description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /fed/posts/{id}:
     get:
@@ -281,10 +333,22 @@ paths:
                 $ref: "#/components/schemas/Post"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
     put:
       tags:
@@ -311,12 +375,28 @@ paths:
           description: OK
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "403":
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       tags:
         - Posts
@@ -336,12 +416,28 @@ paths:
           description: OK
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "403":
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /fed/key:
     get:
@@ -367,8 +463,16 @@ paths:
                   -----END PUBLIC KEY-----
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "501":
           description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /fed/discover:
     get:
@@ -399,8 +503,16 @@ paths:
                   example: "cooldomain.edu"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "501":
           description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -604,3 +716,17 @@ components:
                 ## Subtitle
 
                 ** Some Bold Text **
+
+    Error:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          example: "A short description of the erorr"
+        message:
+          type: string
+          example: >-
+            A long description of the error, giving instructions
+            on how it can be solved and why it occured.
