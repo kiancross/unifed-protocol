@@ -24,68 +24,35 @@ parameters:
       type: string
 paths:
   /fed/communities:
-      get:
-        tags:
-          - Communities
-        summary: Gets a list of the IDs of communities on the server
-        parameters:
-          - $ref: '#/parameters/ClientHost'
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    type: string
-                    format: "^[a-zA-Z0-9-_]{1,24}$"
-                example: [
-                  "cats",
-                  "dogs",
-                  "cs3099",
-                  "physics",
-                  ]
-          '400':
-            description: Bad Request
-          '500':
-            description: Internal Server Error
-
-  /fed/communities/{id}:
-      get:
-        tags:
-          - Communities
-        summary: Gets a community by ID
-        parameters:
-          - $ref: '#/parameters/ClientHost'
-          - in: path
-            name: id
-            description: "ID of the community being requested"
-            required: true
-            schema:
-              type: string
-              format: "^[a-zA-Z0-9-_]{1,24}$"
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Community'
-          '400':
-            description: Bad Request
-          '404':
-            description: Not Found
-          '500':
-            description: Internal Server Error
-
-  /fed/communities/{id}/timestamps:
     get:
       tags:
         - Communities
-      summary: Gets the timestamps of last modification of all posts in a community
+      summary: Gets a list of the IDs of communities on the server
       parameters:
-        - $ref: '#/parameters/ClientHost'
+        - $ref: "#/parameters/ClientHost"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: "^[a-zA-Z0-9-_]{1,24}$"
+              example: ["cats", "dogs", "cs3099", "physics"]
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+
+  /fed/communities/{id}:
+    get:
+      tags:
+        - Communities
+      summary: Gets a community by ID
+      parameters:
+        - $ref: "#/parameters/ClientHost"
         - in: path
           name: id
           description: "ID of the community being requested"
@@ -94,24 +61,62 @@ paths:
             type: string
             format: "^[a-zA-Z0-9-_]{1,24}$"
       responses:
-        '200':
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Community"
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+  /fed/communities/{id}/timestamps:
+    get:
+      tags:
+        - Communities
+      summary: Gets the timestamps of last modification of all posts in a community
+      parameters:
+        - $ref: "#/parameters/ClientHost"
+        - in: path
+          name: id
+          description: "ID of the community being requested"
+          required: true
+          schema:
+            type: string
+            format: "^[a-zA-Z0-9-_]{1,24}$"
+      responses:
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PostTimestamp'
-              example: [
-                  {"id": "884f0f3c-04d9-4d93-bb9c-b140ff262a53", "modified": 1602868491},
-                  {"id": "07f3c861-88a9-46f3-bd0e-9346fb6b5342", "modified": 1552832552},
-                  {"id": "802402b4-0644-4282-9e0a-6b179c9f6e58", "modified": 1602149423}
-                  ]
-        '400':
+                  $ref: "#/components/schemas/PostTimestamp"
+              example:
+                [
+                  {
+                    "id": "884f0f3c-04d9-4d93-bb9c-b140ff262a53",
+                    "modified": 1602868491,
+                  },
+                  {
+                    "id": "07f3c861-88a9-46f3-bd0e-9346fb6b5342",
+                    "modified": 1552832552,
+                  },
+                  {
+                    "id": "802402b4-0644-4282-9e0a-6b179c9f6e58",
+                    "modified": 1602149423,
+                  },
+                ]
+        "400":
           description: Bad Request
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
 
   /fed/posts:
@@ -120,7 +125,7 @@ paths:
         - Posts
       summary: Gets all posts matching filters
       parameters:
-        - $ref: '#/parameters/ClientHost'
+        - $ref: "#/parameters/ClientHost"
         - name: limit
           in: query
           description: Filters by the n latest posts
@@ -180,18 +185,18 @@ paths:
             example: "markdown"
 
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
-        '400':
+                  $ref: "#/components/schemas/Post"
+        "400":
           description: Bad Request
-        '500':
-            description: Internal Server Error
+        "500":
+          description: Internal Server Error
     post:
       tags:
         - Posts
@@ -215,108 +220,108 @@ paths:
         allowed and there are restrictions on certain combinations, currently
         `text` and `markdown` are mutually exclusive.
       parameters:
-        - $ref: '#/parameters/ClientHost'
+        - $ref: "#/parameters/ClientHost"
       requestBody:
         description: New post to be added to a community
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewPost'
+              $ref: "#/components/schemas/NewPost"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
-        '400':
+                $ref: "#/components/schemas/Post"
+        "400":
           description: Bad Request
-        '500':
-            description: Internal Server Error
-        '501':
-            description: Not Implemented
+        "500":
+          description: Internal Server Error
+        "501":
+          description: Not Implemented
 
   /fed/posts/{id}:
     get:
-        tags:
-          - Posts
-        summary: Gets a post
-        parameters:
-          - $ref: '#/parameters/ClientHost'
-          - in: path
-            name: id
-            required: true
-            schema:
-              type: string
-              format: uuidv4
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Post'
-          '400':
-            description: Bad Request
-          '404':
-            description: Not Found
-          '500':
-            description: Internal Server Error
-
-    put:
-        tags:
-          - Posts
-        summary: Edits a post
-        description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
-        parameters:
-          - $ref: '#/parameters/ClientHost'
-          - in: path
-            name: id
-            required: true
-            schema:
-              type: string
-              format: uuidv4
-        requestBody:
-          description: New post to be added to a community
+      tags:
+        - Posts
+      summary: Gets a post
+      parameters:
+        - $ref: "#/parameters/ClientHost"
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuidv4
+      responses:
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdatePost'
-        responses:
-          '200':
-            description: OK
-          '400':
-            description: Bad Request
-          '403':
-            description: Forbidden
-          '404':
-            description: Not Found
-          '500':
-            description: Internal Server Error
-    delete:
-        tags:
-          - Posts
-        summary: Deletes a post
-        description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
-        parameters:
-          - $ref: '#/parameters/ClientHost'
-          - in: path
-            name: id
-            required: true
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+    put:
+      tags:
+        - Posts
+      summary: Edits a post
+      description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
+      parameters:
+        - $ref: "#/parameters/ClientHost"
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuidv4
+      requestBody:
+        description: New post to be added to a community
+        content:
+          application/json:
             schema:
-              type: string
-              format: uuidv4
-        responses:
-          '200':
-            description: OK
-          '400':
-            description: Bad Request
-          '403':
-            description: Forbidden
-          '404':
-            description: Not Found
-          '500':
-            description: Internal Server Error
+              $ref: "#/components/schemas/UpdatePost"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    delete:
+      tags:
+        - Posts
+      summary: Deletes a post
+      description: "Only allowed if request is made by the server associated with the author or the admins of the community the post belongs to, 403 returned otherwise"
+      parameters:
+        - $ref: "#/parameters/ClientHost"
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuidv4
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
 
   /fed/key:
     get:
@@ -324,7 +329,7 @@ paths:
         - Other
       summary: Gets the server's public key
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/x-pem-file:
@@ -340,9 +345,9 @@ paths:
                   vMtq16LU2yIi/MyCQxDgWTgzLUwz053PpgiYoSamjo+g89oGSPcZAwlrW6HJJA5+
                   uQIDAQAB
                   -----END PUBLIC KEY-----
-        '500':
+        "500":
           description: Internal Server Error
-        '501':
+        "501":
           description: Not Implemented
 
 components:
@@ -382,11 +387,8 @@ components:
         admins:
           type: array
           items:
-            $ref: '#/components/schemas/UserId'
-          example: [{
-            "id": "coolusername123",
-            "host": "cooldomain.edu"
-          }]
+            $ref: "#/components/schemas/UserId"
+          example: [{ "id": "coolusername123", "host": "cooldomain.edu" }]
 
     NewPost:
       description: >
@@ -413,7 +415,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/PostContent'
+            $ref: "#/components/schemas/PostContent"
         author:
           type: string
           format: "^[a-zA-Z0-9-_]{1,24}$"
@@ -431,7 +433,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/PostContent'
+            $ref: "#/components/schemas/PostContent"
 
     Post:
       type: object
@@ -462,16 +464,21 @@ components:
           items:
             type: string
             format: uuidv4v4
-          example: ["b78b29f4-88d2-4500-b3f9-704449b262e2", "53da9025-0ba3-4966-8703-824c7418172a", "d2073b6a-3115-4089-b198-6db799bc53ad"]
+          example:
+            [
+              "b78b29f4-88d2-4500-b3f9-704449b262e2",
+              "53da9025-0ba3-4966-8703-824c7418172a",
+              "d2073b6a-3115-4089-b198-6db799bc53ad",
+            ]
         title:
           type: string
           example: "Bezos's Wealth Overflows 64-bit Signed Integer, Now Massively In Debt"
         content:
           type: array
           items:
-            $ref: '#/components/schemas/PostContent'
+            $ref: "#/components/schemas/PostContent"
         author:
-          $ref: '#/components/schemas/UserId'
+          $ref: "#/components/schemas/UserId"
         modified:
           type: integer
           example: 1552832552
@@ -495,8 +502,8 @@ components:
 
     PostContent:
       oneOf:
-        - $ref: '#/components/schemas/PostContentText'
-        - $ref: '#/components/schemas/PostContentMarkdown'
+        - $ref: "#/components/schemas/PostContentText"
+        - $ref: "#/components/schemas/PostContentMarkdown"
 
     PostContentText:
       type: object
