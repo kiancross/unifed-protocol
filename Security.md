@@ -19,7 +19,7 @@ HTTP request. For simplicity, this is restricted to `sha-512`.
 2. Base64 encode the output of the hash.
 3. Add the header `Digest: sha-512=<base64_sha512_hash>` to the HTTP request where
    `<base64_sha512_hash>` is the value from step 2.
-   
+
 ##### Warning
 
 Some libraries may give the hash output as hex (rather than binary). In such a case, when Base64
@@ -51,6 +51,7 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
      * `<Request Path>` e.g. `/fed/posts`.
    * `host` - The value from the `Host` HTTP header.
    * `client-host` - The value from the `Client-Host` HTTP header.
+   * `user-id` - The ID of the user causing the request to be made, in the format `^[a-zA-Z0-9-_]{1,24}$`.
    * `date` - The value from the `Date` HTTP header.
    * `digest` - The value from the `Digest` HTTP header.
 3. The string from step 2 should be `rsa-sha512` signed using [PKCS #1](https://tools.ietf.org/html/rfc8017)
@@ -90,7 +91,7 @@ Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host 
 2. Base64 encode the output of the hash.
 3. Verify that the output from step 2 matches the `<base64_sha512_hash>` value from the `Digest` header:
    `Digest: sha-512=<base64_sha512_hash>`.
-   
+
 ## Some Examples
 
 ### Python
@@ -106,8 +107,8 @@ with open("private.pem", "rb") as key_file:
    private_key = serialization.load_pem_private_key(
       key_file.read(),
       password=None,
-   )   
-   
+   )
+
 public_key = private_key.public_key()
 pem = public_key.public_bytes(
    encoding=serialization.Encoding.PEM,
@@ -143,8 +144,8 @@ with open("private.pem", "rb") as key_file:
    private_key = serialization.load_pem_private_key(
       key_file.read(),
       password=None,
-   )   
-  
+   )
+
 message = b"A message I want to sign"
 signature = private_key.sign(
     message,
@@ -255,7 +256,7 @@ verify.end();
 const result = verify.verify(publicKey, signature, "base64");
 console.log(result);
 ```
-   
+
 ## N.B.
 
 There has been a newly published (November 2020) diverging specification for signing HTTP messages:
