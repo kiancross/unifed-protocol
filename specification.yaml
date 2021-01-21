@@ -518,7 +518,7 @@ paths:
   /fed/users:
     get:
       tags:
-        - users
+        - Users
       summary: Search for users
       description: >
         All users should be returned if no filters
@@ -553,7 +553,7 @@ paths:
   /fed/users/{id}:
     get:
       tags:
-        - users
+        - Users
       summary: Gets a user by ID
       parameters:
         - in: path
