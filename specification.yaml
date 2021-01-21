@@ -13,6 +13,7 @@ tags:
       $ref: Security.md
   - name: Communities
   - name: Posts
+  - name: Users
   - name: Other
 parameters:
   ClientHost:
@@ -514,6 +515,68 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /fed/users:
+    get:
+      tags:
+        - users
+      summary: Search for users
+      description: >
+        All users should be returned if no filters
+        are passed.
+      parameters:
+        - name: prefix
+          in: query
+          description: Filters users by ID prefix
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: joh
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: "^[a-zA-Z0-9-_]{1,24}$"
+                  example: john
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+            
+  /fed/users/{id}:
+    get:
+      tags:
+        - users
+      summary: Gets a user by ID
+      parameters:
+        - in: path
+          name: id
+          description: "ID of the user being requested"
+          required: true
+          schema:
+            type: string
+            format: "^[a-zA-Z0-9-_]{1,24}$"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+
 components:
   schemas:
     UserId:
@@ -663,6 +726,32 @@ components:
         modified:
           type: integer
           example: 1552832552
+
+    User:
+      type: object
+      required:
+        - id
+        - posts
+      properties:
+        id:
+          type: string
+          format: "^[a-zA-Z0-9-_]{1,24}$"
+          example: "john"
+        posts:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - host
+            properties:
+              id:
+                type: string
+                format: uuidv4
+                example: "5ab3acce-e9d1-4b3a-be97-60d2cbe32a4c"
+              host:
+                type: string
+                example: "cooldomain.edu"
 
     PostContent:
       oneOf:
