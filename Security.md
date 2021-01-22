@@ -58,9 +58,9 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
    (you will almost certainly need to use a library to do this).
 4. The signature from step 3 should be Base64 encoded. See the
    [previous warning](#warning).
-5. Send the following header in the HTTP request:
+5. Send the following header in the HTTP request (only including `user-id` if required by the request):
    ```
-   Signature: keyId="rsa-global",algorithm="hs2019",headers="(request-target) host date digest",signature="<base64_signature>"
+   Signature: keyId="rsa-global",algorithm="hs2019",headers="(request-target) host client-host user-id date digest",signature="<base64_signature>"
    ```
    All fields are static apart from the final signature field, which is the output from step 4.
 
@@ -78,9 +78,9 @@ MUST be verified.**
    * You can not continue any further with verification (including verification of the
     `Digest` header).
 2. Generate the string from step 1 of [Creating the Signature Header](#creating-the-signature-header).
-3. Obtain the `<base64_signature>` from the `Signature` header:
+3. Obtain the `<base64_signature>` from the `Signature` header (only including `user-id` if required by the request):
 ```
-Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host date digest",signature="<base64_signature>"
+Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host client-host user-id date digest",signature="<base64_signature>"
 ```
 4. Using the `rsa-sha512` algorithm, verify, using the public key from step 1, that `<base64_signature>` is
    valid using [PKCS #1](https://tools.ietf.org/html/rfc8017) (you will almost certainly need to use a library to do this).
