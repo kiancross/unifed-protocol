@@ -1,6 +1,6 @@
 # Supergroup A Protocol
 
-[Rendered at https://mckeogh.tech/cs3099a-specification/index.html](https://mckeogh.tech/cs3099a-specification/index.html)
+[Rendered at https://fmckeogh.github.io/cs3099a-specification/](https://fmckeogh.github.io/cs3099a-specification/)
 
 ## Changelog
 
