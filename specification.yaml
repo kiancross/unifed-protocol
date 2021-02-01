@@ -576,7 +576,35 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-
+    post:
+      tags:
+        - Users 
+      summary: Send the user a message 
+      parameters:
+        - in: path
+          name: id 
+          description: "ID of the user being messaged"
+          required: true 
+          schema:
+            type: string 
+            format: "^[a-zA-Z0-9-_]{1,24}$"
+      requestBody:
+        description: The message being sent 
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DirectMessage"
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '501':
+          description: Not Implemented
 components:
   schemas:
     UserId:
@@ -626,7 +654,6 @@ components:
         - community
         - title
         - content
-        - author
       properties:
         community:
           type: string
@@ -643,10 +670,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/PostContent"
-        author:
-          type: string
-          format: "^[a-zA-Z0-9-_]{1,24}$"
-          example: "coolusername123"
 
     UpdatePost:
       type: object
@@ -752,6 +775,18 @@ components:
               host:
                 type: string
                 example: "cooldomain.edu"
+      
+    DirectMessage:
+      type: object 
+      required:
+        - title 
+        - content 
+      properties:
+        title:
+          type: string
+          example: "Why ban?"
+        content:
+          $ref: "#/components/schemas/PostContent"
 
     PostContent:
       oneOf:
