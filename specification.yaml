@@ -731,9 +731,11 @@ components:
           $ref: "#/components/schemas/UserId"
         modified:
           type: integer
+          format: unix_timestamp
           example: 1552832552
         created:
           type: integer
+          format: unix_timestamp
           example: 1552832584
 
     PostTimestamp:
@@ -748,6 +750,7 @@ components:
           example: "5ab3acce-e9d1-4b3a-be97-60d2cbe32a4c"
         modified:
           type: integer
+          format: unix_timestamp
           example: 1552832552
 
     User:
