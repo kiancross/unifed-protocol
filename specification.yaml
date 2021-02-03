@@ -947,6 +947,7 @@ components:
       required:
         - name 
         - path 
+        - positivity
       properties:
         name:
           type: string
@@ -955,6 +956,10 @@ components:
         url:
           type: string 
           example: "cooldomain.edu/.../img.png"
+        positivity:
+          type: number
+          format: "[0-1]"
+          example: 0.5
       
     Reaction:
       type: object
