@@ -763,6 +763,12 @@ components:
           type: string
           format: "^[a-zA-Z0-9-_]{1,24}$"
           example: "john"
+        about:
+          type: string 
+          example: "A place for a user to write an about / bio"
+        avatarUrl:
+          type: string 
+          example: "cooldomain.edu/media/profile_imgs/avatar.png"
         posts:
           type: array
           items:
