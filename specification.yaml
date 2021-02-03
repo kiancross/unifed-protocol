@@ -952,7 +952,7 @@ components:
           type: string
           format: "^[a-zA-Z0-9-_]{1,24}$"
           example: "sailing"
-        path:
+        url:
           type: string 
           example: "cooldomain.edu/.../img.png"
       
