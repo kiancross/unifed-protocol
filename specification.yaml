@@ -918,7 +918,7 @@ components:
           example:
             [
               {
-                "react": {"name": "like", "path": "cooldomain.edu/like.png"},
+                "react": {"id": "like", "name": "like", "path": "cooldomain.edu/like.png"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
@@ -926,14 +926,14 @@ components:
                 ]
               },{
                 
-                "react": {"name": "dislike", "path": "cooldomain.edu/dislike.png"},
+                "react": {"id": "dislike", "name": "dislike", "path": "cooldomain.edu/dislike.png"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
                     "d2073b6a-3115-4089-b198-6db799bc53ad",
                 ]
               },{
-                "react": {"name": "cat_jam", "path": "cooldomain.edu/cat_jam.gif"},
+                "react": {"id": "cat_jam", "name": "cat jam", "path": "cooldomain.edu/cat_jam.gif"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
@@ -945,14 +945,18 @@ components:
     React:
       type: object 
       required:
+        - id
         - name 
         - path 
         - positivity
       properties:
-        name:
+        id:
           type: string
           format: "^[a-zA-Z0-9-_]{1,24}$"
           example: "sailing"
+        name:
+          type: string
+          example: "sailing boat emoji"
         url:
           type: string 
           example: "cooldomain.edu/.../img.png"
