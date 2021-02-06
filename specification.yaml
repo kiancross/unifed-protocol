@@ -964,7 +964,3 @@ components:
           example: >-
             A long description of the error, giving instructions
             on how it can be solved and why it occured.
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/rjw422/CS3099-DM/1.0.0
