@@ -280,6 +280,13 @@ paths:
         poll in a single post. However, only a single object of each kind is
         allowed and there are restrictions on certain combinations, currently
         `text` and `markdown` are mutually exclusive.
+        
+        One thing to note when creating a react post the react content type
+        has fields id, name, url and posativity. Only the `ìd` field needs to 
+        be valid when creating a reaction as the rest will be populated by the 
+        server handeling the instance. It seems nicer to only have one content 
+        type for reacts than one for creating and another for getting. This is 
+        reason for the incosistency. 
       parameters:
         - $ref: "#/parameters/ClientHost"
         - $ref: "#/parameters/UserIDHeader"
@@ -444,148 +451,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   
-  /fed/reacts:
-    post:
-      tags:
-        - Reacts
-      summary: Create a new react 
-      parameters:
-        - $ref: "#/parameters/ClientHost"
-        - $ref: "#/parameters/UserIDHeader"
-      requestBody:
-        description: The new react 
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/NewReaction"
-      responses:
-        "201":
-          description: Created
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "501":
-          description: Not implemented 
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  
-  /fed/reacts/{id}:
-    get:
-      tags: 
-        - Reacts
-      summary: Get information about a Reaction 
-      parameters:
-        - $ref: "#/parameters/ClientHost"
-        - $ref: "#/parameters/UserIDHeader"
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuidv4
-      responses:
-        "200":
-          description: OK
-          content:
-            aplication/json:
-              schema:
-                $ref: "#/components/schemas/Reaction"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "501":
-          description: Not implemented 
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      tags:
-        - Reacts
-      summary: Deletes a Reaction
-      parameters:
-        - $ref: "#/parameters/ClientHost"
-        - $ref: "#/parameters/UserIDHeader"
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuidv4
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        
-    
-
   /fed/key:
     get:
       tags:
@@ -794,7 +659,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/React"
-          example: [{ "name": "like", "path": "cooldomain.edu/like.png"}, {"name": "dislike", "path":"cooldomain.edu/dislike.png"}]
+          example: [
+            {"id":"like", "name": "like", "path": "cooldomain.edu/like.png", "posativity": "1"}, 
+            {"id":"dislike", "name": "dislike", "path":"cooldomain.edu/dislike.png",  "posativity": "0"}
+          ]
 
     NewPost:
       description: >
@@ -822,29 +690,6 @@ components:
           items:
             $ref: "#/components/schemas/PostContent"
             
-    NewReaction:
-      description: >
-        Use the Client-Host and User-ID Http header to get the host and 
-        user making the request to create the react. 
-      type: object 
-      required:
-        - community 
-        - parentPost 
-        - reactName 
-      properties:
-        community:
-          type: string
-          format: "^[a-zA-Z0-9-_]{1,24}$"
-          example: "sailing"
-        parentPost:
-          type: string
-          format: "uuidv4"
-          example: "dafca76d-5883-4eff-959a-d32bc9f72e1a"
-        reactName:
-          type: string 
-          format: "^[a-zA-Z0-9-_]{1,24}$"
-          example: "like"
-
     UpdatePost:
       type: object
       required:
@@ -918,7 +763,7 @@ components:
           example:
             [
               {
-                "react": {"id": "like", "name": "like", "path": "cooldomain.edu/like.png"},
+                "react": {"id": "like", "name": "like", "path": "cooldomain.edu/like.png", "positivity": "1"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
@@ -926,14 +771,14 @@ components:
                 ]
               },{
                 
-                "react": {"id": "dislike", "name": "dislike", "path": "cooldomain.edu/dislike.png"},
+                "react": {"id": "dislike", "name": "dislike", "path": "cooldomain.edu/dislike.png", "positivity": "0"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
                     "d2073b6a-3115-4089-b198-6db799bc53ad",
                 ]
               },{
-                "react": {"id": "cat_jam", "name": "cat jam", "path": "cooldomain.edu/cat_jam.gif"},
+                "react": {"id": "cat_jam", "name": "cat jam", "path": "cooldomain.edu/cat_jam.gif", "positivity": "0.5"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
@@ -964,38 +809,7 @@ components:
           type: number
           format: "[0-1]"
           example: 0.5
-      
-    Reaction:
-      type: object
-      required:
-        - id
-        - react 
-        - author 
-        - created 
-        - parentPost 
-        - community 
-      properties:
-        id:
-          type: string
-          format: "uuidv4"
-          example: "dafca76d-5883-4eff-959a-d32bc9f72e1a"
-        react:
-          $ref: "#/components/schemas/React"
-        author:
-          $ref: "#/components/schemas/UserId"
-        created:
-          type: integer 
-          format: unix_timestamp 
-          example: 1552832552
-        parentPost:
-          type: string
-          format: uuidv4
-          example: "5ab3acce-e9d1-4b3a-be97-60d2cbe32a4c"
-        community:
-          type: string
-          format: "^[a-zA-Z0-9-_]{1,24}$"
-          example: "sailing"
-          
+
     PostReaction:
       type: object
       required:
@@ -1079,6 +893,7 @@ components:
       oneOf:
         - $ref: "#/components/schemas/PostContentText"
         - $ref: "#/components/schemas/PostContentMarkdown"
+        - $ref: "#/components/schemas/PostContentReact"
 
     PostContentText:
       type: object
@@ -1128,6 +943,14 @@ components:
 
                 ** Some Bold Text **
 
+    PostContentReact:
+      type: object
+      required:
+        - react
+      properties:
+        react:
+          $ref: "#/components/schemas/React"
+
     Error:
       type: object
       required:
@@ -1141,3 +964,7 @@ components:
           example: >-
             A long description of the error, giving instructions
             on how it can be solved and why it occured.
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/rjw422/CS3099-DM/1.0.0
