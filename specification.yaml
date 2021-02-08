@@ -70,7 +70,10 @@ paths:
       summary: Gets a community by ID
       description: >
         Note the reacts paramater in the community response is entierly 
-        optional and may not be present. 
+        optional and may not be present. Also when implementing reacts 
+        every community must return a like and dislike react. This is 
+        so instances which implement an up/down vote system can use these 
+        reacts for this. 
       parameters:
         - $ref: "#/parameters/ClientHost"
         - in: path
