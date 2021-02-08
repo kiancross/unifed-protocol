@@ -814,6 +814,7 @@ components:
       required:
         - react
         - reactions
+        - userReactUUID
       properties:
         react:
           $ref: "#/components/schemas/React"
@@ -828,6 +829,9 @@ components:
               "53da9025-0ba3-4966-8703-824c7418172a",
               "d2073b6a-3115-4089-b198-6db799bc53ad",
             ]
+        userReactUUID:
+          type: string 
+          format: uuidv4v4
 
     PostTimestamp:
       type: object
