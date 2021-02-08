@@ -280,13 +280,6 @@ paths:
         poll in a single post. However, only a single object of each kind is
         allowed and there are restrictions on certain combinations, currently
         `text` and `markdown` are mutually exclusive.
-        
-        One thing to note when creating a react post the react content type
-        has fields id, name, url and posativity. Only the `ìd` field needs to 
-        be valid when creating a reaction as the rest will be populated by the 
-        server handeling the instance. It seems nicer to only have one content 
-        type for reacts than one for creating and another for getting. This is 
-        reason for the incosistency. 
       parameters:
         - $ref: "#/parameters/ClientHost"
         - $ref: "#/parameters/UserIDHeader"
@@ -949,10 +942,11 @@ components:
     PostContentReact:
       type: object
       required:
-        - react
+        - id
       properties:
         react:
-          $ref: "#/components/schemas/React"
+          type: string
+          example: "like"
 
     Error:
       type: object
