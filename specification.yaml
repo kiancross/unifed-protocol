@@ -74,6 +74,14 @@ paths:
         every community must return a like and dislike react. This is 
         so instances which implement an up/down vote system can use these 
         reacts for this. 
+        
+        Another item to note about reacts is that they contain a path and a 
+        unicode property. Only one of these has to be set. The unicode property 
+        should represent a single unicode character to be displayed as that 
+        react. With the unicode for a react there is no length limit placed 
+        on it becuase calculating the length of a unicode string is hard. For 
+        example the character '🏴󠁧󠁢󠁳󠁣󠁴󠁿' has length 7/9 but only appears as a single 
+        character. 
       parameters:
         - $ref: "#/parameters/ClientHost"
         - in: path
@@ -656,8 +664,8 @@ components:
           items:
             $ref: "#/components/schemas/React"
           example: [
-            {"id":"like", "name": "like", "path": "cooldomain.edu/like.png", "posativity": "1"}, 
-            {"id":"dislike", "name": "dislike", "path":"cooldomain.edu/dislike.png",  "posativity": "0"}
+            {"id": "like", "name": "like", "path": "null", "unicode":"👍", "positivity": "1"}, 
+            {"id": "dislike", "name": "dislike", "path": "null", "unicode":"👎", "positivity": "0"}
           ]
 
     NewPost:
@@ -758,7 +766,7 @@ components:
           example:
             [
               {
-                "react": {"id": "like", "name": "like", "path": "cooldomain.edu/like.png", "positivity": "1"},
+                "react": {"id": "like", "name": "like", "path": "null", "unicode":"👍", "positivity": "1"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
@@ -766,14 +774,14 @@ components:
                 ]
               },{
                 
-                "react": {"id": "dislike", "name": "dislike", "path": "cooldomain.edu/dislike.png", "positivity": "0"},
+                "react": {"id": "dislike", "name": "dislike", "path": "null", "unicode":"👎", "positivity": "0"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
                     "d2073b6a-3115-4089-b198-6db799bc53ad",
                 ]
               },{
-                "react": {"id": "cat_jam", "name": "cat jam", "path": "cooldomain.edu/cat_jam.gif", "positivity": "0.5"},
+                "react": {"id": "cat_jam", "name": "cat jam", "path": "cooldomain.edu/cat_jam.gif", "unicode":"null", "positivity": "0.5"},
                 "reactions" : [
                     "b78b29f4-88d2-4500-b3f9-704449b262e2",
                     "53da9025-0ba3-4966-8703-824c7418172a",
@@ -787,7 +795,8 @@ components:
       required:
         - id
         - name 
-        - path 
+        - path
+        - unicode 
         - positivity
       properties:
         id:
@@ -797,9 +806,12 @@ components:
         name:
           type: string
           example: "sailing boat emoji"
-        url:
+        path:
           type: string 
           example: "cooldomain.edu/.../img.png"
+        unicode:
+          type: string 
+          example: "😀"
         positivity:
           type: number
           format: "[0-1]"
