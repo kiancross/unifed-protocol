@@ -279,6 +279,7 @@ paths:
         `text` and `markdown` are mutually exclusive.
       parameters:
         - $ref: "#/parameters/ClientHost"
+        - $ref: "#/parameters/UserIDHeader"
       requestBody:
         description: New post to be added to a community
         content:
