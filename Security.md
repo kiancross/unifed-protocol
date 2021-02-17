@@ -39,6 +39,7 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
    (request-target): post /fed/posts
    host: cooldomain.edu:8080
    client-host: anotherdomain.edu:7070
+   user-id: johnsmith
    date: Tue, 07 Jun 2021 20:51:35 GMT
    digest: SHA-512=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=
    ```
@@ -51,7 +52,8 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
      * `<Request Path>` e.g. `/fed/posts`.
    * `host` - The value from the `Host` HTTP header.
    * `client-host` - The value from the `Client-Host` HTTP header.
-   * `user-id` - The ID of the user causing the request to be made, in the format `^[a-zA-Z0-9-_]{1,24}$`.
+   * `user-id` - The value from the `User-ID` HTTP header. If the `User-ID` HTTP header is not included in
+                 the request, then this field should be omitted.
    * `date` - The value from the `Date` HTTP header.
    * `digest` - The value from the `Digest` HTTP header.
 3. The string from step 2 should be `rsa-sha512` signed using [PKCS #1](https://tools.ietf.org/html/rfc8017)
@@ -78,7 +80,7 @@ MUST be verified.**
    * You can not continue any further with verification (including verification of the
     `Digest` header).
 2. Generate the string from step 1 of [Creating the Signature Header](#creating-the-signature-header).
-3. Obtain the `<base64_signature>` from the `Signature` header (only including `user-id` if required by the request):
+3. Obtain the `<base64_signature>` from the `Signature` header:
 ```
 Signature: keyId="global",algorithm="rsa-sha512",headers="(request-target) host client-host user-id date digest",signature="<base64_signature>"
 ```
