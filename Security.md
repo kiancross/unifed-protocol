@@ -52,8 +52,7 @@ encoding, you must convert from hex to Base64, *not* binary to Base64.
      * `<Request Path>` e.g. `/fed/posts`.
    * `host` - The value from the `Host` HTTP header.
    * `client-host` - The value from the `Client-Host` HTTP header.
-   * `user-id` - The value from the `User-ID` HTTP header. If the `User-ID` HTTP header is not included in
-                 the request, then this field should be omitted.
+   * `user-id` - The value from the `User-ID` HTTP header. If the `User-ID` HTTP header is not included in the request, then this field should be omitted.
    * `date` - The value from the `Date` HTTP header.
    * `digest` - The value from the `Digest` HTTP header.
 3. The string from step 2 should be `rsa-sha512` signed using [PKCS #1](https://tools.ietf.org/html/rfc8017)
