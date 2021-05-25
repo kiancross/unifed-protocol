@@ -1,0 +1,41 @@
+name: Continous Integration
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Generate Documentation ⚙️
+        uses: seeebiii/redoc-cli-github-action@v10
+        with:
+          args: bundle specification/specification.yaml -o index.html
+
+      - name: Upload Documentation 📤
+        uses: actions/upload-artifact@v2
+        with:
+          name: documentation
+          path: index.html
+  
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Download Documentation 📥
+        uses: actions/download-artifact@v2
+        with:
+          name: documentation
+
+      - name: Deploy Documentation 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          publish_dir: .
